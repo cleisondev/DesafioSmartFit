@@ -71,7 +71,7 @@ if(!unit.schedules) return true
 
 
 filter(results: Location[], showClosed: boolean, hour: string){
-  let intermediateResults = results;
+  let intermediateResults =  results;
   
   if(!showClosed){
    intermediateResults =  results.filter(location => location.opened === true)

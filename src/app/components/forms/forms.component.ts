@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { GetUnitsService } from './../../services/get-units.service';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from '../../app.component';
 import { Location } from '../../Types/location.interface';
@@ -15,8 +15,7 @@ import { FilterUnitsService } from '../../services/filter-units.service';
   styleUrl: './forms.component.scss'
 })
 export class FormsComponent implements OnInit {
-
-httpClient = inject(HttpClient)
+@Output() submitEvent = new EventEmitter();
 
 results: Location[] = [];
 filteredResults: Location[] = [];
@@ -32,8 +31,8 @@ constructor(private formBuilder: FormBuilder,
     showClosed: true,
    })
    this.unitService.getAllUnits().subscribe(data => {
-    this.results = data.locations
-    this.filteredResults = data.locations
+    this.results = data;
+    this.filteredResults = data
   });
   }
 
@@ -41,6 +40,9 @@ constructor(private formBuilder: FormBuilder,
 onSubmit(): void{
   let {showClosed,hour} = this.formGroup.value
   this.filteredResults = this.filterUnitsService.filter(this.results, showClosed,hour)
+  this.unitService.setFilteredUnits(this.filteredResults)
+
+  this.submitEvent.emit();
   }
 
 
