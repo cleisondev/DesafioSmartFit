@@ -8,6 +8,7 @@ import { GetUnitsService } from './services/get-units.service';
 import { BehaviorSubject } from 'rxjs';
 import { CardsListComponent } from './components/cards-list/cards-list.component';
 import { CommonModule } from '@angular/common';
+import { Location } from './Types/location.interface';
 
 @Component({
   selector: 'app-root',
@@ -20,9 +21,15 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'DesafioSmartFit';
   showList = new BehaviorSubject(false)
+  unitsLists: Location[] = []
+
+
+  constructor(private unitService: GetUnitsService){
+
+  }
 
   onSubmit(){
-    console.log('chegou no app')
+    this.unitsLists = this.unitService.getFilteredUnits();
     this.showList.next(true)
   }
 }
